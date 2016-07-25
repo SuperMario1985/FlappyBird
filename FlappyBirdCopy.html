@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>FlappyBirdCopy</title>
+    <style type="text/css">
+        #game {
+            width: 800px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            background: url(images/sky.png) top center no-repeat;
+            border: 1px solid #000;
+        }
+
+        #game .pipeU {
+            /*width: 53px;*/
+            background: url(images/pipe2.png) bottom center no-repeat;
+            position: absolute;
+        }
+
+        #game .pipeD {
+            background: url(images/pipe1.png) top center no-repeat;
+            position: absolute;
+        }
+
+        #bird {
+            width: 34px;
+            height: 26px;
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            background: url(images/birds.png) -8px -10px no-repeat;
+        }
+    </style>
+</head>
+<body>
+<div id="game">
+    <div id="bird"></div>
+</div>
+</body>
+</html>
+<script>
+    //    var game = document.getElementById(game);  有问题
+    var game = document.getElementById("game");
+    var birdEle = document.getElementById("bird");
+    var g= 1;
+    var gameon= true;
+   /* var bird = {
+        entity: birdEle,
+        speedY: 5,
+        speedX: 5,
+//        x: birdEle.offsetLeft,
+//        y: birdEle.offsetTop
+        x:birdEle.offsetLeft,
+        y:birdEle.offsetTop
+    }*/
+    var bird = {
+        entity: birdEle,
+        speedX: 5,
+        speedY: 5,
+        x: birdEle.offsetLeft,
+        y: birdEle.offsetTop
+    }
+    var sky = {
+        position:0
+    }
+
+    function Pipe(position) {
+        //上下管子的位置
+        this.x = position;
+        this.width = 54;
+        this.UpPipeY = 0;
+        this.UpPipeH = parseInt(Math.random() * 275) + 100;
+        this.DownPipeY = this.UpPipeH + 150;
+        this.DownPipeH = 600 - this.DownPipeY;
+
+        //创建管子，给管子添加样式
+        var divUp = document.createElement("div");
+        divUp.className = "pipeU";
+        /*divUp.width = this.width + "px";
+         divUp.top = this.UpPipeY + "px";
+         divUp.left = this.x + "px";
+         divUp.height = this.UpPipeH+"px";                          有问题 未加style*/
+        divUp.style.width = this.width + "px";
+        divUp.style.top = this.UpPipeY + "px";
+        divUp.style.left = this.x + "px";
+        divUp.style.height = this.UpPipeH + "px";
+
+        var divDown = document.createElement("div");
+        divDown.className = "pipeD";
+        divDown.style.left = this.x + "px";
+        divDown.style.top = this.DownPipeY + "px";
+        divDown.style.width = this.width + "px";
+        divDown.style.height = this.DownPipeH + "px";
+        //将管子的div放到#game下
+        game.appendChild(divUp);
+        game.appendChild(divDown);
+
+        //管子运动
+        var _this = this;
+        setInterval(function () {
+            _this.x -= 1;
+            //管子循环
+            if(_this.x<-53){
+                _this.x = 800;
+            }
+            //将位置变量赋值给管子
+            if(gameon){
+                divDown.style.left = _this.x + "px";
+                divUp.style.left = _this.x + "px";
+            }
+            //判断游戏是否结束
+            var clsUp = (bird.x + 34 > _this.x) && (bird.x < _this.x + 52) && (bird.y < _this.upPipeH);
+            var clsDown = (bird.x + 34 > _this.x) && (bird.x < _this.x + 52) && (bird.y + 26 > _this.downPipeY);
+            if (clsUp || clsDown) {
+                gameon = false;
+            }
+        }, 10)
+    }
+    //背景图片
+    /*function BackImg (position){
+        this.x = position;
+        this.width = 800;
+        this.height = 600;
+        this.fl = left;
+
+        var img1 =document.createElement("img");
+        this.x = position;
+        img.style.width = this.width;
+        img.style.height = this.height;
+        img.style.float =left;
+        img.style.src = "images/sky.png";
+    }*/
+
+
+    //小鸟和天空位置的变化
+    setInterval(function () {
+
+        if(gameon){
+            //小鸟位置变化
+            bird.speedY = bird.speedY + g;
+            bird.y = bird.y +bird.speedY;
+            bird.entity.style.top = bird.y +"px";
+            if(bird.y<0){
+                bird.y = 0;
+                gameon = false;
+            }
+            if(bird.y>600-26){
+                bird.y = 600-26;
+                gameon = false;
+            }
+            //天空位置变化
+            sky.position -= bird.speedX;
+            game.style.backgroundPositionX = sky.position +"px";
+        }
+
+
+    },25)
+
+    document.onmousedown = function(){
+        bird.speedY = -10;
+    }
+    for (var i = 0; i < 4; i++) {
+        new Pipe(400 + 800 / 4 * i);
+    }
+
+    /* var divUp = document.createElement("div");
+     //    divUp.className = pipeU; 有问题
+     divUp.className = "pipeU";
+     game.appendChild(divUp);*/
+</script>

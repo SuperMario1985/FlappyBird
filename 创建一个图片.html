@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>创建一个图片</title>
+    <style type="text/css">
+        #banner {
+            width: 800px;
+            height: 600px;
+        }
+
+        #box {
+            width: 1600px;
+            height: 600px;
+        }
+        #box .banner{
+            background: url(images/sky.png) top center no-repeat;
+        }
+    </style>
+</head>
+<body>
+<div id="banner">
+    <div id="box">
+    </div>
+</div>
+</body>
+</html>
+<script>
+    //背景图片
+    var box = document.getElementById("box");
+    function BackImg() {
+        this.width = 800;
+        this.height = 600;
+        this.fl = left;
+
+        var img = document.createElement("div");
+        img.className = "banner";
+        img.style.width = this.width;
+        img.style.height = this.height;
+        box.appendChild(img);
+    }
+//    BackImg();
+    new BackImg();
+</script>
